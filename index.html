@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Habesha Games - Agent Portal</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+      :root {
+        --primary: #2b2d42;
+        --secondary: #8d99ae;
+        --accent: #ef233c;
+        --bg: #f4f6f8;
+        --white: #ffffff;
+        --text-main: #1d1e2c;
+      }
+      body {
+        font-family: "Inter", "Segoe UI", sans-serif;
+        background: var(--bg);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        margin: 0;
+        padding: 20px;
+        box-sizing: border-box;
+      }
+      .container {
+        background: var(--white);
+        padding: 40px 30px;
+        border-radius: 16px;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);
+        width: 100%;
+        max-width: 400px;
+        transition: all 0.3s ease;
+      }
+      h2 {
+        text-align: center;
+        color: var(--primary);
+        margin-bottom: 25px;
+        margin-top: 0;
+        font-size: 24px;
+        font-weight: 700;
+      }
+      h3 {
+        color: var(--primary);
+        font-size: 18px;
+        margin-bottom: 10px;
+        border-bottom: 2px solid #e9ecef;
+        padding-bottom: 5px;
+      }
+      .form-group {
+        position: relative;
+        margin-bottom: 15px;
+      }
+      input {
+        width: 100%;
+        padding: 14px 15px;
+        background-color: #f8f9fa;
+        border: 1px solid #e9ecef;
+        border-radius: 10px;
+        box-sizing: border-box;
+        font-size: 15px;
+        color: var(--text-main);
+      }
+      input:focus {
+        outline: none;
+        border-color: var(--secondary);
+        background-color: var(--white);
+      }
+      button {
+        width: 100%;
+        padding: 15px;
+        background-color: var(--primary);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: 600;
+        margin-top: 10px;
+        margin-bottom: 10px;
+        transition: 0.2s;
+      }
+      button:hover {
+        background-color: #1a1c29;
+      }
+      .btn-secondary {
+        background-color: transparent;
+        color: var(--primary);
+        border: 2px solid var(--primary);
+      }
+      .btn-secondary:hover {
+        background-color: #f8f9fa;
+      }
+      .btn-reject {
+        background-color: var(--accent);
+      }
+      .btn-reject:hover {
+        background-color: #d90429;
+      }
+      .hidden {
+        display: none;
+      }
+      .link {
+        color: var(--accent);
+        cursor: pointer;
+        text-align: center;
+        display: block;
+        margin-top: 20px;
+        font-size: 14px;
+        font-weight: 600;
+      }
+      .link:hover {
+        text-decoration: underline;
+      }
+      .text-center {
+        text-align: center;
+        font-size: 14px;
+        margin-bottom: 15px;
+        color: var(--secondary);
+        line-height: 1.5;
+      }
+      .otp-container {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 25px;
+        margin-top: 15px;
+      }
+      .otp-input {
+        width: 50px;
+        height: 60px;
+        text-align: center;
+        font-size: 24px;
+        font-weight: bold;
+        border-radius: 10px;
+        border: 2px solid #e9ecef;
+        background-color: #f8f9fa;
+      }
+      .otp-input:focus {
+        border-color: var(--primary);
+      }
+      .request-card {
+        background: #f8f9fa;
+        padding: 18px;
+        border-radius: 12px;
+        margin-bottom: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border: 1px solid #e9ecef;
+      }
+      .action-btn {
+        background-color: #2a9d8f;
+        margin: 10px 0 0 0;
+        padding: 12px;
+      }
+      .action-btn:hover {
+        background-color: #21867a;
+      }
+      .btn-group {
+        display: flex;
+        gap: 10px;
+      }
+      .countdown-text {
+        color: var(--accent);
+        font-weight: bold;
+        font-size: 16px;
+        margin-bottom: 15px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="loginPage" class="container">
+      <h2>Habesha Games Agent</h2>
+      <div class="form-group">
+        <input type="tel" id="loginPhone" placeholder="Phone Number" />
+      </div>
+      <div class="form-group">
+        <input type="password" id="loginPass" placeholder="Password" />
+      </div>
+      <button onclick="handleLogin()">Log In</button>
+      <div class="text-center" style="margin-top: 25px">
+        Don't have an agent account?
+      </div>
+      <button class="btn-secondary" onclick="switchPage('registerPage')">
+        Register as Agent
+      </button>
+    </div>
+
+    <div id="registerPage" class="container hidden">
+      <h2>Become an Agent</h2>
+      <div class="form-group">
+        <input type="text" id="regName" placeholder="Full Name" />
+      </div>
+      <div class="form-group">
+        <input type="text" id="regFather" placeholder="Father's Name" />
+      </div>
+      <div class="form-group">
+        <input type="tel" id="regPhone" placeholder="Phone Number (09...)" />
+      </div>
+      <div class="form-group">
+        <input type="password" id="regPass" placeholder="Create Password" />
+      </div>
+      <div class="form-group">
+        <input
+          type="password"
+          id="regPassConfirm"
+          placeholder="Re-write Password"
+        />
+      </div>
+
+      <button
+        id="getBtn"
+        onclick="registerUser()"
+        style="background-color: #0088cc"
+      >
+        Get Code via Telegram
+      </button>
+
+      <div id="verifySec" class="hidden">
+        <div id="countdownDisplay" class="text-center countdown-text">
+          Redirecting to Admin in 60 seconds...
+        </div>
+        <div
+          class="text-center"
+          style="font-weight: 600; color: var(--primary); font-size: 15px"
+        >
+          Once you get the code on Telegram, <u>come back to this screen</u> and
+          type it below!
+        </div>
+        <div class="otp-container">
+          <input type="text" class="otp-input" maxlength="1" /><input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+          /><input type="text" class="otp-input" maxlength="1" /><input
+            type="text"
+            class="otp-input"
+            maxlength="1"
+          /><input type="text" class="otp-input" maxlength="1" />
+        </div>
+        <button onclick="submitCode()">Next</button>
+      </div>
+
+      <div id="waitingSec" class="hidden text-center">
+        <h3 style="margin-bottom: 20px">Checking Code...</h3>
+        <p>Please wait while the admin verifies your code.</p>
+      </div>
+      <span class="link" onclick="switchPage('loginPage')">Back to Login</span>
+    </div>
+
+    <div id="adminDashboard" class="container hidden" style="max-width: 500px">
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-bottom: 25px;
+        "
+      >
+        <h2 style="margin: 0">Admin Dashboard</h2>
+        <button
+          onclick="loadPendingAgents()"
+          style="
+            width: auto;
+            padding: 8px 15px;
+            margin: 0;
+            background-color: var(--accent);
+          "
+        >
+          Refresh
+        </button>
+      </div>
+
+      <h3>Step 1: Contacting on Telegram</h3>
+      <p class="text-center" style="font-size: 12px; margin-top: -5px">
+        (Users who clicked the link and should be messaging you now)
+      </p>
+      <div id="step1List">Loading...</div>
+
+      <h3 style="margin-top: 30px">Step 2: Double Checking Codes</h3>
+      <p class="text-center" style="font-size: 12px; margin-top: -5px">
+        (Compare their entered code vs what you sent them on Telegram)
+      </p>
+      <div id="step2List">Loading...</div>
+
+      <button
+        class="btn-secondary"
+        onclick="switchPage('loginPage')"
+        style="margin-top: 20px"
+      >
+        Log Out
+      </button>
+    </div>
+
+    <script>
+      // ==========================================
+      // YOUR TELEGRAM DIRECT LINK
+      // ==========================================
+      const TELEGRAM_LINK = "https://t.me/+251945842581";
+
+      const API_URL = "/api";
+      let pollingInterval = null;
+      let countdownInterval = null;
+
+      // Initialize Telegram Web App features
+      const tg = window.Telegram.WebApp;
+      tg.expand(); // Expands the web app to full height
+
+      function switchPage(id) {
+        document
+          .querySelectorAll(".container")
+          .forEach((c) => c.classList.add("hidden"));
+        document.getElementById(id).classList.remove("hidden");
+      }
+
+      function handleLogin() {
+        const phone = document.getElementById("loginPhone").value;
+        const pass = document.getElementById("loginPass").value;
+        if (phone === "0909090909" && pass === "1209099") {
+          switchPage("adminDashboard");
+          loadPendingAgents();
+          document.getElementById("loginPhone").value = "";
+          document.getElementById("loginPass").value = "";
+        } else {
+          alert("Normal user login would happen here!");
+        }
+      }
+
+      // --- USER FLOW ---
+      async function registerUser() {
+        const data = {
+          fullName: document.getElementById("regName").value,
+          fatherName: document.getElementById("regFather").value,
+          phone: document.getElementById("regPhone").value,
+          password: document.getElementById("regPass").value,
+        };
+        const confirm = document.getElementById("regPassConfirm").value;
+
+        if (!data.phone || !data.password) return alert("Fill all fields!");
+        if (data.password !== confirm) return alert("Passwords do not match.");
+
+        try {
+          const res = await fetch(`${API_URL}/register`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data),
+          });
+          const result = await res.json();
+
+          if (res.ok) {
+            document.getElementById("getBtn").classList.add("hidden");
+            document
+              .querySelectorAll("#registerPage .form-group")
+              .forEach((el) => el.classList.add("hidden"));
+            document.getElementById("verifySec").classList.remove("hidden");
+
+            let timeLeft = 60;
+            const display = document.getElementById("countdownDisplay");
+            display.innerText = `Redirecting to Admin in ${timeLeft} seconds...`;
+
+            countdownInterval = setInterval(() => {
+              timeLeft--;
+              display.innerText = `Redirecting to Admin in ${timeLeft} seconds...`;
+
+              if (timeLeft <= 0) {
+                clearInterval(countdownInterval);
+                display.innerText =
+                  "Telegram opened! Please message the Admin.";
+                display.style.color = "#2a9d8f";
+
+                // MAGIC: Opens your personal Telegram safely inside the Mini App!
+                if (
+                  tg.initDataUnsafe &&
+                  Object.keys(tg.initDataUnsafe).length > 0
+                ) {
+                  tg.openTelegramLink(TELEGRAM_LINK);
+                } else {
+                  window.open(TELEGRAM_LINK, "_blank");
+                }
+              }
+            }, 1000);
+          } else {
+            alert(result.error);
+          }
+        } catch (e) {
+          alert("Server error.");
+        }
+      }
+
+      async function submitCode() {
+        const inputs = document.querySelectorAll(".otp-input");
+        const code = Array.from(inputs)
+          .map((i) => i.value)
+          .join("");
+        const phone = document.getElementById("regPhone").value;
+
+        try {
+          const res = await fetch(`${API_URL}/submit-code`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ phone, code }),
+          });
+          if (res.ok) {
+            document.getElementById("verifySec").classList.add("hidden");
+            document.getElementById("waitingSec").classList.remove("hidden");
+            startPolling(phone);
+          } else {
+            const err = await res.json();
+            alert(err.error || "Error submitting code.");
+          }
+        } catch (e) {
+          alert("Server connection failed.");
+        }
+      }
+
+      function startPolling(phone) {
+        pollingInterval = setInterval(async () => {
+          try {
+            const res = await fetch(`${API_URL}/status/${phone}`);
+            const data = await res.json();
+
+            if (data.status === "approved") {
+              clearInterval(pollingInterval);
+              alert("Congrats you become our agent!");
+              window.location.reload();
+            } else if (data.status === "rejected_code") {
+              clearInterval(pollingInterval);
+              alert("Incorrect verification code try again!");
+              document.getElementById("waitingSec").classList.add("hidden");
+              document.getElementById("verifySec").classList.remove("hidden");
+              document
+                .querySelectorAll(".otp-input")
+                .forEach((i) => (i.value = ""));
+              document.querySelectorAll(".otp-input")[0].focus();
+            } else if (data.status === "expired") {
+              clearInterval(pollingInterval);
+              alert(
+                "Session expired (10 minutes passed). Please register again."
+              );
+              window.location.reload();
+            }
+          } catch (e) {}
+        }, 1000);
+      }
+
+      // --- ADMIN FLOW ---
+      async function loadPendingAgents() {
+        try {
+          const res = await fetch(`${API_URL}/admin/requests`);
+          const agents = await res.json();
+
+          const step1 = document.getElementById("step1List");
+          const step2 = document.getElementById("step2List");
+          step1.innerHTML = "";
+          step2.innerHTML = "";
+
+          let hasStep1 = false;
+          let hasStep2 = false;
+
+          agents.forEach((agent) => {
+            if (agent.status === "visiting_telegram") {
+              hasStep1 = true;
+              step1.innerHTML += `
+                            <div class="request-card">
+                                <div><strong>${agent.fullName} ${agent.fatherName}</strong></div>
+                                <div>Phone: <span style="font-weight:bold; color:#4a4e69;">${agent.phone}</span></div>
+                                <div style="color:var(--accent); font-size:13px; margin-top:5px; font-weight:600;">Opening Telegram to message you...</div>
+                            </div>`;
+            } else if (agent.status === "code_submitted") {
+              hasStep2 = true;
+              step2.innerHTML += `
+                            <div class="request-card" style="border: 2px solid #2a9d8f;">
+                                <div><strong>${agent.fullName} ${agent.fatherName}</strong></div>
+                                <div style="margin-bottom: 8px;">Phone: <span style="font-weight:bold; color:#4a4e69;">${agent.phone}</span></div>
+                                <div style="color:#555; font-size: 16px;">User Entered: <b style="color:var(--accent); font-size: 20px; letter-spacing: 2px;">${agent.submittedCode}</b></div>
+                                <div class="btn-group">
+                                    <button class="action-btn" onclick="finalDecision('${agent.phone}', 'approve')">Approve Match</button>
+                                    <button class="btn-reject" onclick="finalDecision('${agent.phone}', 'reject')">Reject Incorrect</button>
+                                </div>
+                            </div>`;
+            }
+          });
+
+          if (!hasStep1)
+            step1.innerHTML =
+              '<div class="text-center">No new requests right now.</div>';
+          if (!hasStep2)
+            step2.innerHTML =
+              '<div class="text-center">No codes waiting for verification.</div>';
+        } catch (e) {
+          alert("Could not fetch requests");
+        }
+      }
+
+      async function finalDecision(phone, action) {
+        try {
+          await fetch(`${API_URL}/admin/decision`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ phone, action }),
+          });
+          loadPendingAgents();
+        } catch (e) {
+          alert("Error connecting to server.");
+        }
+      }
+
+      // Auto-focus OTP fields
+      const otpInputs = document.querySelectorAll(".otp-input");
+      otpInputs.forEach((input, index) => {
+        input.addEventListener("input", (e) => {
+          if (e.target.value.length === 1 && index < otpInputs.length - 1)
+            otpInputs[index + 1].focus();
+        });
+        input.addEventListener("keydown", (e) => {
+          if (e.key === "Backspace" && e.target.value === "" && index > 0)
+            otpInputs[index - 1].focus();
+        });
+      });
+    </script>
+  </body>
+</html>
