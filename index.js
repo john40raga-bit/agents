@@ -11,7 +11,7 @@ const token = "8786156256:AAEy_ZVNBHMTL1XqozbA1JE4E-HX0N977S4";
 const bot = new TelegramBot(token, { polling: true });
 
 // IMPORTANT: Replace this with your actual CodeSandbox Live Link (must start with https://)
-const WEB_APP_URL = "https://ytdz94-8080.csb.app";
+const WEB_APP_URL = "https://agents-ktyl.onrender.com";
 
 // Listen for the /start command
 bot.onText(/\/start/, (msg) => {
