@@ -31,7 +31,6 @@
         .action-btn { background-color: #2a9d8f; margin: 10px 0 0 0; padding: 12px; }
         .action-btn:hover { background-color: #21867a; }
         .btn-group { display: flex; gap: 10px; }
-        .countdown-text { color: var(--accent); font-weight: bold; font-size: 16px; margin-bottom: 15px; }
         .error-message { color: red; text-align: center; font-weight: bold; margin-bottom: 15px; font-size: 14px; }
     </style>
 </head>
@@ -57,14 +56,18 @@
         <div class="form-group"><input type="password" id="regPass" placeholder="የይለፍ ቃል ይፍጠሩ"></div>
         <div class="form-group"><input type="password" id="regPassConfirm" placeholder="የይለፍ ቃል ያረጋግጡ"></div>
         
-        <button id="getBtn" onclick="registerUser()" style="background-color: #0088cc;">ኮዱን በቴሌግራም ያግኙ</button>
+        <button id="getBtn" onclick="registerUser()" style="background-color: #0088cc;">ቀጥል (Next)</button>
 
         <div id="verifySec" class="hidden">
-            <div id="countdownDisplay" class="text-center countdown-text">
-                ወደ አድሚን በ 60 ሰከንዶች ውስጥ ይመራዎታል...
+            
+            <div class="text-center" style="font-weight:700; color:var(--primary); font-size: 16px; margin-bottom: 10px;">
+                1. ኮዱን ለማግኘት ከታች ያለውን ቁልፍ ተጭነው አድሚኑን ያነጋግሩ!
             </div>
-            <div class="text-center" style="font-weight:600; color:var(--primary); font-size: 15px;">
-                ኮዱን በቴሌግራም እንዳገኙ፣ <u>ወደዚህ ገጽ ተመልሰው</u> ከታች ያስገቡት!
+            
+            <button onclick="openAdminTelegram()" style="background-color: #2a9d8f; margin-bottom: 25px;">ወደ ቴሌግራም ሂድ (Open Telegram)</button>
+
+            <div class="text-center" style="font-weight:700; color:var(--primary); font-size: 15px;">
+                2. ኮዱን እንዳገኙ፣ <u>ወደዚህ ተመልሰው</u> ከታች ያስገቡት!
             </div>
             <div class="otp-container">
                 <input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1"><input type="text" class="otp-input" maxlength="1">
@@ -100,11 +103,10 @@
         // ==========================================
         // YOUR TELEGRAM DIRECT LINK
         // ==========================================
-        const TELEGRAM_LINK = "https://t.me/+42777"; 
+        const TELEGRAM_LINK = "https://t.me/+251945842581"; 
         
         const API_URL = '/api';
         let pollingInterval = null;
-        let countdownInterval = null; 
 
         const tg = window.Telegram.WebApp;
         tg.expand();
@@ -112,7 +114,7 @@
         function switchPage(id) {
             document.querySelectorAll('.container').forEach(c => c.classList.add('hidden'));
             document.getElementById(id).classList.remove('hidden');
-            document.getElementById('loginErrorMsg').classList.add('hidden'); // Hide error on page switch
+            document.getElementById('loginErrorMsg').classList.add('hidden'); 
         }
 
         function handleLogin() {
@@ -125,7 +127,6 @@
                 document.getElementById('loginPhone').value = '';
                 document.getElementById('loginPass').value = '';
             } else {
-                // Show the red Amharic error message to tell them to register
                 document.getElementById('loginErrorMsg').classList.remove('hidden');
             }
         }
@@ -150,35 +151,23 @@
                 const result = await res.json();
 
                 if(res.ok) {
+                    // Instantly shows the code entry screen with the physical button
                     document.getElementById('getBtn').classList.add('hidden');
                     document.querySelectorAll('#registerPage .form-group').forEach(el => el.classList.add('hidden'));
                     document.getElementById('verifySec').classList.remove('hidden');
-                    
-                    let timeLeft = 60;
-                    const display = document.getElementById('countdownDisplay');
-                    display.innerText = `ወደ አድሚን በ ${timeLeft} ሰከንዶች ውስጥ ይመራዎታል...`;
-                    
-                    countdownInterval = setInterval(() => {
-                        timeLeft--;
-                        display.innerText = `ወደ አድሚን በ ${timeLeft} ሰከንዶች ውስጥ ይመራዎታል...`;
-                        
-                        if (timeLeft <= 0) {
-                            clearInterval(countdownInterval);
-                            display.innerText = "ቴሌግራም ተከፍቷል! እባክዎ አድሚኑን ያነጋግሩ።";
-                            display.style.color = "#2a9d8f"; 
-                            
-                            if (tg.initDataUnsafe && Object.keys(tg.initDataUnsafe).length > 0) {
-                                tg.openTelegramLink(TELEGRAM_LINK);
-                            } else {
-                                window.open(TELEGRAM_LINK, '_blank');
-                            }
-                        }
-                    }, 1000); 
-
                 } else {
                     alert("ስህተት፡ " + result.error);
                 }
             } catch (e) { alert("ከሰርቨር ጋር መገናኘት አልተቻለም።"); }
+        }
+
+        // Physically tapping this button bypasses mobile popup blockers
+        function openAdminTelegram() {
+            if (tg.initDataUnsafe && Object.keys(tg.initDataUnsafe).length > 0) {
+                tg.openTelegramLink(TELEGRAM_LINK);
+            } else {
+                window.open(TELEGRAM_LINK, '_blank');
+            }
         }
 
         async function submitCode() {
