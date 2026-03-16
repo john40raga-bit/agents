@@ -32,7 +32,7 @@ console.log("🤖 Main Telegram Bot is running...");
 // Put your SECOND bot's token here
 const ADMIN_BOT_TOKEN = '8516287735:AAGalCJ-UJZRwM2E2ybqh-M50UfXqcFQmoU'; 
 // Put your PERSONAL Telegram Chat ID here (so the bot texts YOU)
-const MY_PERSONAL_CHAT_ID = '8516287735'; 
+const MY_PERSONAL_CHAT_ID = '6035085802'; 
 
 // ==========================================
 // EXPRESS SERVER SETUP
