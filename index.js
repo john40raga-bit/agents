@@ -30,7 +30,7 @@ console.log("🤖 Main Telegram Bot is running...");
 // 2. ADMIN NOTIFICATION BOT SETUP
 // ==========================================
 // Put your SECOND bot's token here
-const ADMIN_BOT_TOKEN = 'YOUR_SECOND_BOT_TOKEN_HERE'; 
+const ADMIN_BOT_TOKEN = '8516287735:AAGalCJ-UJZRwM2E2ybqh-M50UfXqcFQmoU'; 
 // Put your PERSONAL Telegram Chat ID here (so the bot texts YOU)
 const MY_PERSONAL_CHAT_ID = 'YOUR_CHAT_ID_HERE'; 
 
