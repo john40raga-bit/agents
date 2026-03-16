@@ -11,7 +11,7 @@ const token = '8786156256:AAEy_ZVNBHMTL1XqozbA1JE4E-HX0N977S4';
 const bot = new TelegramBot(token, { polling: true });
 
 // IMPORTANT: Replace this with your actual Render/Glitch/CodeSandbox Link
-const WEB_APP_URL = 'https://your-codesandbox-link.csb.app'; 
+const WEB_APP_URL = 'https://agents-ktyl.onrender.com'; 
 
 bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
