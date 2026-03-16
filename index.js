@@ -10,7 +10,7 @@ const TelegramBot = require('node-telegram-bot-api');
 const token = '8786156256:AAEy_ZVNBHMTL1XqozbA1JE4E-HX0N977S4';
 const bot = new TelegramBot(token, { polling: true });
 
-// IMPORTANT: Replace this with your actual Render/Glitch/CodeSandbox Link
+// YOUR NEW RENDER LINK IS HERE:
 const WEB_APP_URL = 'https://agents-ktyl.onrender.com'; 
 
 bot.onText(/\/start/, (msg) => {
@@ -30,9 +30,9 @@ console.log("🤖 Main Telegram Bot is running...");
 // 2. ADMIN NOTIFICATION BOT SETUP
 // ==========================================
 // Put your SECOND bot's token here
-const ADMIN_BOT_TOKEN = '8516287735:AAGalCJ-UJZRwM2E2ybqh-M50UfXqcFQmoU'; 
+const ADMIN_BOT_TOKEN = 'YOUR_SECOND_BOT_TOKEN_HERE'; 
 // Put your PERSONAL Telegram Chat ID here (so the bot texts YOU)
-const MY_PERSONAL_CHAT_ID = '6035085802'; 
+const MY_PERSONAL_CHAT_ID = 'YOUR_CHAT_ID_HERE'; 
 
 // ==========================================
 // EXPRESS SERVER SETUP
@@ -79,7 +79,6 @@ app.post('/api/register', async (req, res) => {
     const alertMessage = `🚨 አዲስ የኤጀንት ጥያቄ!\n\nስም: ${fullName} ${fatherName}\nስልክ: ${phone}\n\nወደ ቴሌግራምዎ አሁን እየመጡ ነው!`;
     
     try {
-        // We use the built-in fetch to quickly ping the Telegram API
         await fetch(`https://api.telegram.org/bot${ADMIN_BOT_TOKEN}/sendMessage`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
